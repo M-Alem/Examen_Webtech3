@@ -23,20 +23,20 @@ app.get('/', (req, res) => {
    res.redirect('/list')
 })
 
-// List all products
+// List all posts
 app.get('/list', (req, res) => {
-  db.collection('products').find().toArray((err, result) => {
+  db.collection('posts').find().toArray((err, result) => {
     if (err) return console.log(err)
-    res.render('list.ejs', {products: result})
+    res.render('list.ejs', {posts: result})
   })
 })
 
-// Show the add product form
+// Show the add post form
 app.get('/add', (req, res) => {
    res.render('add.ejs', {})
 })
 
-// Add a product to the db
+// Add a post to the db
 app.post('/add', (req, res) => {
   db.collection('products').save(req.body, (err, result) => {
     if (err) return console.log(err)
@@ -46,24 +46,24 @@ app.post('/add', (req, res) => {
 
 // Show the search form
 app.get('/search', (req, res) => {
-   res.render('search.ejs', { product: '' })
+   res.render('search.ejs', { post: '' })
 })
 
-// Find a product
+// Find a post
 app.post('/search', (req, res) => {
  var query = { name: req.body.name }
- db.collection('products').find(query).toArray(function(err, result) {
+ db.collection('posts').find(query).toArray(function(err, result) {
    if (err) return console.log(err)
    if (result == '')
        res.render('search_not_found.ejs', {})
    else
-       res.render('search_result.ejs', { product: result[0] })
+       res.render('search_result.ejs', { post: result[0] })
  });
 })
 
-// Delete a product
+// Delete a post
 app.post('/delete', (req, res) => {
-  db.collection('products').findOneAndDelete({name: req.body.name}, (err, result) => {
+  db.collection('posts').findOneAndDelete({name: req.body.name}, (err, result) => {
     if (err) return res.send(500, err)
     res.redirect('/list')
   })
